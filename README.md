@@ -1,2 +1,2 @@
-# megamibot
-megamibot
+# holycowsnft
+holycowsbot
