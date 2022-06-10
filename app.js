@@ -9,6 +9,11 @@ const cache = require('./cache');
 function formatAndSendTweet(event) {
     // Handle both individual items + bundle sales
     const assetName = _.get(event, ['asset', 'name'], _.get(event, ['asset_bundle', 'name']));
+
+    if (assetName === null) {
+    	console.log("NULL EXCEPTION; FAILING.");
+	return;
+    }
     const openseaLink = _.get(event, ['asset', 'permalink'], _.get(event, ['asset_bundle', 'permalink']));
 
     const totalPrice = _.get(event, 'total_price');
@@ -21,14 +26,9 @@ function formatAndSendTweet(event) {
     const formattedEthPrice = formattedUnits * tokenEthPrice;
     const formattedUsdPrice = formattedUnits * tokenUsdPrice;
 
-    //get id
-    const assetID = `${openseaLink}`;
-    const catid = assetID.substr(69);
-
-    const tweetText = `Based Ghoul #${catid} was bought for ${formattedEthPrice}${ethers.constants.EtherSymbol} ($${Number(formattedUsdPrice).toFixed(2)}) #NFTs ${openseaLink}`;
+    const tweetText = `${assetName} bought for ${formattedEthPrice}${ethers.constants.EtherSymbol} ($${Number(formattedUsdPrice).toFixed(2)}) #NFTs ${openseaLink}`;
 
     console.log(tweetText);
-
     // OPTIONAL PREFERENCE - don't tweet out sales below X ETH (default is 1 ETH - change to what you prefer)
     // if (Number(formattedEthPr
     //     console.log(`${assetName} sold below tweet price (${formattedEthPrice} ETH).`);
