@@ -11,7 +11,7 @@ function formatAndSendTweet(event) {
     const assetName = _.get(event, ['asset', 'name'], _.get(event, ['asset_bundle', 'name']));
     const openseaLink = _.get(event, ['asset', 'permalink'], _.get(event, ['asset_bundle', 'permalink']));
 
-    const totalPrice = _.get(event, 'total_price'); 
+    const totalPrice = _.get(event, 'total_price');
 
     const tokenDecimals = _.get(event, ['payment_token', 'decimals']);
     const tokenUsdPrice = _.get(event, ['payment_token', 'usd_price']);
@@ -21,7 +21,11 @@ function formatAndSendTweet(event) {
     const formattedEthPrice = formattedUnits * tokenEthPrice;
     const formattedUsdPrice = formattedUnits * tokenUsdPrice;
 
-    const tweetText = `${assetName} bought for ${formattedEthPrice}${ethers.constants.EtherSymbol} ($${Number(formattedUsdPrice).toFixed(2)}) #NFTs ${openseaLink}`;
+    //get id
+    const assetID = `${openseaLink}`;
+    const catid = assetID.substr(69);
+
+    const tweetText = `Based Ghoul #${catid} was bought for ${formattedEthPrice}${ethers.constants.EtherSymbol} ($${Number(formattedUsdPrice).toFixed(2)}) #NFTs ${openseaLink}`;
 
     console.log(tweetText);
 
