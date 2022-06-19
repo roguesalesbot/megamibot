@@ -8,6 +8,7 @@ const cache = require('./cache');
 // Format tweet text
 function formatAndSendTweet(event) {
     // Handle both individual items + bundle sales
+    console.log("were in");
     const assetName = _.get(event, ['asset', 'name'], _.get(event, ['asset_bundle', 'name']));
     const openseaLink = _.get(event, ['asset', 'permalink'], _.get(event, ['asset_bundle', 'permalink']));
 
@@ -39,17 +40,18 @@ function formatAndSendTweet(event) {
     const imageUrl = _.get(event, ['asset', 'image_url']);
     // without image
     tweet.tweetWithImage(tweetText, imageUrl);
-
-    // return tweet.tweet(tweetText);
 }
 
-// Poll OpenSea every 60 seconds & retrieve all sales for a given collection in either the time since the last sale OR in the last minute
+// Poll OpenSea every 300 seconds & retrieve all sales for a given collection in either the time since the last sale OR in the last minute
 setInterval(() => {
     const lastSaleTime = cache.get('lastSaleTime', null) || moment().startOf('minute').subtract(61, "seconds").unix();
 
     console.log(`Last sale (in seconds since Unix epoch): ${cache.get('lastSaleTime', null)}`);
 
     axios.get('https://api.opensea.io/api/v1/events', {
+        headers: {
+            'X-API-KEY': process.env.X_API_KEY
+        },
         params: {
             collection_slug: process.env.OPENSEA_COLLECTION_SLUG,
             event_type: 'successful',
@@ -76,5 +78,5 @@ setInterval(() => {
         });
     }).catch((error) => {
         console.error(error);
-    });
+    });    
 }, 60000);
