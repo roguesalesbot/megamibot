@@ -24,7 +24,7 @@ function formatAndSendTweet(event) {
 
     //get id
     const assetID = `${openseaLink}`;
-    const catid = assetID.substr(69);
+    const catid = assetID.substr(78);
 
     const tweetText = `witchtown #${catid} was rescued for ${formattedEthPrice}${ethers.constants.EtherSymbol} ($${Number(formattedUsdPrice).toFixed(2)}) #NFTs ${openseaLink}`;
     
