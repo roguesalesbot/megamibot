@@ -8,11 +8,10 @@ const cache = require('./cache');
 // Format tweet text
 function formatAndSendTweet(event) {
     // Handle both individual items + bundle sales
-    console.log("were in");
     const assetName = _.get(event, ['asset', 'name'], _.get(event, ['asset_bundle', 'name']));
     const openseaLink = _.get(event, ['asset', 'permalink'], _.get(event, ['asset_bundle', 'permalink']));
 
-    const totalPrice = _.get(event, 'total_price');
+    const totalPrice = _.get(event, 'total_price'); 
 
     const tokenDecimals = _.get(event, ['payment_token', 'decimals']);
     const tokenUsdPrice = _.get(event, ['payment_token', 'usd_price']);
@@ -22,12 +21,12 @@ function formatAndSendTweet(event) {
     const formattedEthPrice = formattedUnits * tokenEthPrice;
     const formattedUsdPrice = formattedUnits * tokenUsdPrice;
 
-    //get id
-    const assetID = `${openseaLink}`;
-    const catid = assetID.substr(78);
-
-    const tweetText = `witchtown #${catid} was bought for ${formattedEthPrice}${ethers.constants.EtherSymbol} ($${Number(formattedUsdPrice).toFixed(2)}) #NFTs ${openseaLink}`;
+    console.log("new code test");
+    console.log(formattedEthPrice);
+    console.log(formattedUsdPrice);
     
+    const tweetText = `${assetName} bought for ${formattedEthPrice}${ethers.constants.EtherSymbol} ($${Number(formattedUsdPrice).toFixed(2)}) #NFTs ${openseaLink}`;
+
     console.log(tweetText);
 
     // OPTIONAL PREFERENCE - don't tweet out sales below X ETH (default is 1 ETH - change to what you prefer)
@@ -37,9 +36,12 @@ function formatAndSendTweet(event) {
     // }
 
     // OPTIONAL PREFERENCE - if you want the tweet to include an attached image instead of just text
+
     const imageUrl = _.get(event, ['asset', 'image_url']);
-    // without image
-    tweet.tweetWithImage(tweetText, imageUrl);
+
+    return tweet.tweetWithImage(tweetText, imageUrl);
+
+    //return tweet.tweet(tweetText);
 }
 
 // Poll OpenSea every 300 seconds & retrieve all sales for a given collection in either the time since the last sale OR in the last minute
